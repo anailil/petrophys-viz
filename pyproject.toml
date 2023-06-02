@@ -1,0 +1,12 @@
+# Complete your project's details below
+# Here is an example: https://peps.python.org/pep-0621/
+[project]
+name = "pyproject"
+version = "0.0.1"
+
+dependencies = [
+    "pandas==2.0.2",
+    "matplotlib==3.7.1",
+]
+
+# requirements
