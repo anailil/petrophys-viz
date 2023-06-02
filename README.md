@@ -1,6 +1,18 @@
 tno_geothermal_targets
 ==============================
 
+
+To install the dependencies, run the following command in the command:
+```
+pip install .
+```
+
+For interactive intallation, run the following command in the command:
+```
+pip install -e .
+```
+
+
 Visualization of the main geothermal targets in NL
 
 Project Organization
