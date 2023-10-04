@@ -1,22 +1,41 @@
-tno_geothermal_targets
-==============================
+# TNO Geothermal Targets
+Visualization of the main geothermal targets in the Netherlands.
 
+## Documentation for users
 
-To install the dependencies, run the following command in the command:
+### Installation
+Prerequisites:
+- Python 3.11
+- Anaconda (recommended)
+
+We recommend installing the software in a new virtual environment to avoid dependency clashes
+
+```bash
+conda create --name petrophys python=3.11
+conda activate petrophys
+pip install git+https://github.com/anailil/petrophys-viz.git@main
 ```
-pip install .
+
+## Documentation for developers
+To install the dependencies, run the following commands in the command:
+
+```bash
+git clone https://github.com/anailil/petrophys-viz
+cd petrophys-viz
+conda create --name petrophys-dev python=3.11
+conda activate petrophys-dev
+python -m pip install --upgrade pip
+pip install --editable .[dev]
 ```
 
-For interactive intallation, run the following command in the command:
+Run tests with:
+```bash
+pytest
 ```
-pip install -e .
-```
 
 
-Visualization of the main geothermal targets in NL
 
-Project Organization
-------------
+## Project Organization
 
     ├── LICENSE
     ├── Makefile           <- Makefile with commands like `make data` or `make train`
@@ -64,7 +83,7 @@ Project Organization
     └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
 
 
---------
+## License
 
-<p><small>Project structure modified from the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
-# petrophys-viz
+## Credits
+Project structure modified from the [cookiecutter data science project template](https://drivendata.github.io/cookiecutter-data-science/). #cookiecutterdatascience</small></p>
