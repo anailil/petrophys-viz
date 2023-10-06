@@ -10,7 +10,7 @@ def plot_well_curve(plot, curve_type, curve_depth, color, x_label, y_label, grap
         plt.setp(plot.get_xticklabels()[1::hide_tick], visible=False)  # Hide every second tick-label
     remove_last(plot)  # remove last value of x-ticks, see function defined in first cell
 
-def well_curve()
+def well_curve(lasfile)
 
     f1, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1, 5, sharey=True, figsize=(18,16))
     f1.subplots_adjust(wspace=0.02)
