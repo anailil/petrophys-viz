@@ -1,3 +1,19 @@
+import matplotlib.pyplot as plt
+import matplotlib as mpl 
+
+def valtonan(inp, val=-999.25):
+    """Convert all 'val' to NaN's."""
+    inp[inp==val] = np.nan
+    return inp
+
+#This function makes for cleaner axis plotting
+def remove_last(ax, which='upper'):
+    """Remove <which> from x-axis of <ax>.
+    which: 'upper', 'lower', 'both'
+    """
+    nbins = len(ax.get_xticklabels())
+    ax.xaxis.set_major_locator(mpl.ticker.MaxNLocator(nbins=nbins, prune=which))
+
 def plot_well_curve(plot, curve_type, curve_depth, color, x_label, y_label, graphlabel='', linewidth=0.5, label_position='top', grid=True, grid_color='g', alpha=0.3, hide_tick=0):
     plot.plot(curve_type, curve_depth, color, label=graphlabel, linewidth=linewidth)
     plot.xaxis.tick_top()
@@ -10,7 +26,7 @@ def plot_well_curve(plot, curve_type, curve_depth, color, x_label, y_label, grap
         plt.setp(plot.get_xticklabels()[1::hide_tick], visible=False)  # Hide every second tick-label
     remove_last(plot)  # remove last value of x-ticks, see function defined in first cell
 
-def well_curve(lasfile)
+def well_curve(lasfile):
 
     f1, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1, 5, sharey=True, figsize=(18,16))
     f1.subplots_adjust(wspace=0.02)
