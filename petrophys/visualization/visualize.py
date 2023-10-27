@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
-import matplotlib as mpl 
+import matplotlib as mpl
+import numpy as np
 
 def valtonan(inp, val=-999.25):
     """Convert all 'val' to NaN's."""
@@ -9,7 +10,11 @@ def valtonan(inp, val=-999.25):
 #This function makes for cleaner axis plotting
 def remove_last(ax, which='upper'):
     """Remove <which> from x-axis of <ax>.
-    which: 'upper', 'lower', 'both'
+    
+    Parameters
+    ----------
+    which: str
+        which can take 'upper', 'lower', 'both'
     """
     nbins = len(ax.get_xticklabels())
     ax.xaxis.set_major_locator(mpl.ticker.MaxNLocator(nbins=nbins, prune=which))
