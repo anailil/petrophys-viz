@@ -35,7 +35,7 @@ def plot_petro_measure_curve(plot, curve_type, curve_depth, scatter_x='', scatte
 
     plot.plot(curve_type, curve_depth, color, label=graphlabel, linewidth=linewidth)
     if scatter_x != '' and scatter_y != '':
-        plot.scatter(scatter_x,scatter_y,scatter_alpha,scatter_color)
+        plot.scatter(scatter_x,scatter_y,alpha=scatter_alpha,c=scatter_color)
     plot.set_xlabel(x_label,va = label_position)
     plot.set_ylabel(y_label)
     plot.xaxis.tick_top()
@@ -61,18 +61,18 @@ def well_curve(lasfile):
     mpl.rcParams['xtick.labelsize'] = 6
     
     #track1: Gamma Ray
-    plot_petro_measure_curve(ax1, lasfile['GR'], lasfile['DEPT'], 'c', 'GR (API)', 'DEPTH (m)',hide_tick=2)
+    plot_petro_measure_curve(ax1, lasfile['GR'], lasfile['DEPT'], color='c', x_label='GR (API)', x_label='DEPTH (m)',hide_tick=2)
     
     # Track 2: Sonic (velocities)
-    plot_petro_measure_curve(ax2, lasfile['DT']/0.3048, lasfile['DEPT'], 'r', 'DT (m/s)', 'DEPTH (m)', 'DTCO')
+    plot_petro_measure_curve(ax2, lasfile['DT']/0.3048, lasfile['DEPT'], color='r', x_label='DT (m/s)', x_label='DEPTH (m)', graphlabel='DTCO')
     
     # Track 3: RHOB (Bulk Density)
-    plot_petro_measure_curve(ax3, lasfile['RHOB'], lasfile['DEPT'], 'b', 'RHOB (g/cm3', 'DEPTH (m)')
+    plot_petro_measure_curve(ax3, lasfile['RHOB'], lasfile['DEPT'], color='b', x_label='RHOB (g/cm3', x_label='DEPTH (m)')
     
     # Track 4: DRHO
-    plot_petro_measure_curve(ax4, lasfile['DRHO'], lasfile['DEPT'], 'g', 'DRHO (g/cm3)', 'DEPTH (m)')
+    plot_petro_measure_curve(ax4, lasfile['DRHO'], lasfile['DEPT'], color='g', x_label='DRHO (g/cm3)', x_label='DEPTH (m)')
     
     # Track 5: NPHI
-    plot_petro_measure_curve(ax5, lasfile['NPHI'], lasfile['DEPT'], 'k', 'NPHI (v/v)', 'DEPTH (m)')
+    plot_petro_measure_curve(ax5, lasfile['NPHI'], lasfile['DEPT'], color='k', x_label='NPHI (v/v)', x_label='DEPTH (m)')
     
     plt.show()
