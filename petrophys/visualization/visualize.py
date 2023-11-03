@@ -101,7 +101,7 @@ def petro_measure_curve(lasfile, km):
     plot_petro_measure_curve(ax1, lasfile['GR'], lasfile['DEPT'], color='k', x_label='GR (API)', y_label='DEPTH (m)',linewidth=1.0,hide_tick=2)
     
     # Track 2: RHOB
-    plot_petro_measure_curve(ax2, lasfile['RHOB'], lasfile['DEPT'], color='b', x_label='Density (g/cm3)', y_label='DEPTH (m)', scatter_x=dd2, scattery=km['deipte (m)'], linewidth=1.0, hide_tick=2, xlim_low=2.3, xlim_high=3.0)
+    plot_petro_measure_curve(ax2, lasfile['RHOB'], lasfile['DEPT'], color='b', x_label='Density (g/cm3)', y_label='DEPTH (m)', scatter_x=dd2, scatter_y=km['deipte (m)'], linewidth=1.0, hide_tick=2, xlim_low=2.3, xlim_high=3.0)
     
     # Track 5: NPHI
     plot_petro_measure_curve(ax5, lasfile['NPHI']*100, lasfile['DEPT'], color='k', x_label='Porosity (%)', y_label='DEPTH (m)', linewidth=1.0, scatter_x=km['Porositeit (%)'], scatter_y=km['deipte (m)'], scatter_alpha=0.6, scatter_color='b', xlim_high=20)
