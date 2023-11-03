@@ -35,7 +35,7 @@ def plot_petro_measure_curve(plot, curve_type, curve_depth, scatter_x='', scatte
 
     plot.plot(curve_type, curve_depth, color, label=graphlabel, linewidth=linewidth)
     if scatter_x != '' and scatter_y != '':
-        plot.scatter(scatter_x,scatter_y,alpha=scatter_alpha,c=scatter_color)
+        plot.scatter(km[scatter_x],km[scatter_y],alpha=scatter_alpha,c=scatter_color)
     plot.set_xlabel(x_label,va = label_position)
     plot.set_ylabel(y_label)
     plot.xaxis.tick_top()
