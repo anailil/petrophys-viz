@@ -31,11 +31,15 @@ def plot_well_curve(plot, curve_type, curve_depth, color, x_label, y_label, grap
         plt.setp(plot.get_xticklabels()[1::hide_tick], visible=False)  # Hide every second tick-label
     remove_last(plot)  # remove last value of x-ticks, see function defined in first cell
 
-def plot_petro_measure_curve(plot, curve_type, curve_depth, scatter_x='', scatter_y='', scatter_alpha=0.3, scatter_color='g', color='r', x_label='', y_label='', graphlabel='', linewidth=0.5, label_position='top', grid=True, grid_color='g', grid_alpha=0.3, hide_tick=0, xlim_low=0.0, xlim_high=0.0):
+def plot_petro_measure_curve(plot, curve_type, curve_depth, scatter=False, scatter_x='', scatter_y='', scatter_alpha=0.3, scatter_color='g', color='r', x_label='', y_label='', graphlabel='', linewidth=0.5, label_position='top', grid=True, grid_color='g', grid_alpha=0.3, hide_tick=0, xlim_low=0.0, xlim_high=0.0, cores=[], core_linewidth=5.0, core_alpha=0.7):
 
+    if cores != []:
+        plot.plot(*cores, linewidth=core_linewidth,alpha=core_alpha)
     plot.plot(curve_type, curve_depth, color, label=graphlabel, linewidth=linewidth)
-    if scatter_x != '' and scatter_y != '':
+
+    if scatter:
         plot.scatter(scatter_x,scatter_y,alpha=scatter_alpha,c=scatter_color)
+
     plot.set_xlabel(x_label,va = label_position)
     plot.set_ylabel(y_label)
     plot.xaxis.tick_top()
@@ -77,7 +81,7 @@ def well_curve(lasfile):
     
     plt.show()
 
-def petro_measure_curve(lasfile, km):
+def petro_measure_curve(lasfile, km, c):
 
     # Converting '-' into Nan and removing outliers
     km2= valtonan(km, val='-')
@@ -98,12 +102,12 @@ def petro_measure_curve(lasfile, km):
     mpl.rcParams['xtick.labelsize'] = 6
     
     #track1: Gamma Ray
-    plot_petro_measure_curve(ax1, lasfile['GR'], lasfile['DEPT'], color='k', x_label='GR (API)', y_label='DEPTH (m)',linewidth=1.0,hide_tick=2)
+    plot_petro_measure_curve(ax1, lasfile['GR'], lasfile['DEPT'], color='k', x_label='GR (API)', y_label='DEPTH (m)',linewidth=1.0,hide_tick=2, cores=c)
     
     # Track 2: RHOB
-    plot_petro_measure_curve(ax2, lasfile['RHOB'], lasfile['DEPT'], color='b', x_label='Density (g/cm3)', y_label='DEPTH (m)', scatter_x=dd2, scatter_y=km['deipte (m)'], linewidth=1.0, hide_tick=2, xlim_low=2.3, xlim_high=3.0)
+    plot_petro_measure_curve(ax2, lasfile['RHOB'], lasfile['DEPT'], color='b', x_label='Density (g/cm3)', scatter=True, scatter_x=dd2, scatter_y=km['deipte (m)'], linewidth=1.0, hide_tick=2, xlim_low=2.3, xlim_high=3.0)
     
     # Track 5: NPHI
-    plot_petro_measure_curve(ax5, lasfile['NPHI']*100, lasfile['DEPT'], color='k', x_label='Porosity (%)', y_label='DEPTH (m)', linewidth=1.0, scatter_x=km['Porositeit (%)'], scatter_y=km['deipte (m)'], scatter_alpha=0.6, scatter_color='b', xlim_high=20)
+    plot_petro_measure_curve(ax3, lasfile['NPHI']*100, lasfile['DEPT'], color='c', x_label='Porosity (%)', linewidth=1.0, scatter=True, scatter_x=km['Porositeit (%)'], scatter_y=km['deipte (m)'], scatter_alpha=0.6, scatter_color='b', xlim_high=20)
     
     plt.show()
