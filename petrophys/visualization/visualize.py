@@ -57,7 +57,7 @@ def plot_curve(plot, fig='', plot_curve=True, curve_type='', curve_depth='', sca
         plt.setp(plot.get_xticklabels()[1::hide_tick], visible=False)  # Hide every second tick-label
 
     if removelast:
-    remove_last(plot) 
+        remove_last(plot) 
 
 def well_curve(lasfile):
 
