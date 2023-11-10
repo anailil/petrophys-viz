@@ -19,7 +19,7 @@ def remove_last(ax, which='upper'):
     nbins = len(ax.get_xticklabels())
     ax.xaxis.set_major_locator(mpl.ticker.MaxNLocator(nbins=nbins, prune=which))
 
-def plot_curve(plot, fig='', plot_curve=True, curve_type='', curve_depth='', scatter=False, scatter_x='', scatter_y='', scatter_alpha=0.3, scatter_color='g', scatter_cmap='', color='r', x_label='', y_label='', graph_label='', graph_position='top', linewidth=0.5, label_position='top', grid=True, grid_color='g', grid_alpha=0.3, hide_tick=0, xlim_low=0.0, xlim_high=0.0, cores=[], core_linewidth=5.0, core_alpha=0.7, color_bar=False, color_bar_label='', color_bar_rotation=270, y_scale='linear', x_scale='linear', xtick='top'):
+def plot_curve(plot, fig='', plot_curve=True, curve_type='', curve_depth='', scatter=False, scatter_x='', scatter_y='', scatter_alpha=0.3, scatter_color='g', scatter_cmap='', color='r', x_label='', y_label='', graph_label='', graph_position='top', linewidth=0.5, label_position='top', grid=True, grid_color='g', grid_alpha=0.3, hide_tick=0, xlim_low=0.0, xlim_high=0.0, cores=[], core_linewidth=5.0, core_alpha=0.7, color_bar=False, color_bar_label='', color_bar_rotation=270, y_scale='linear', x_scale='linear', xtick='top', removelast=True):
 
     if cores != []:
         plot.plot(*cores, linewidth=core_linewidth,alpha=core_alpha)
@@ -55,6 +55,8 @@ def plot_curve(plot, fig='', plot_curve=True, curve_type='', curve_depth='', sca
         plot.set_xlim(xlim_low, xlim_high)
     if hide_tick != 0:
         plt.setp(plot.get_xticklabels()[1::hide_tick], visible=False)  # Hide every second tick-label
+
+    if removelast:
     remove_last(plot) 
 
 def well_curve(lasfile):
@@ -120,13 +122,13 @@ def depth_intervals_cores(km, dd2, p2, p3):
     mpl.rcParams['xtick.labelsize'] = 6
     
     #track1: RHOB
-    plot_curve(plot=ax1, plot_curve=False, x_label='Density (g/cm3)', scatter=True, scatter_x=dd2, scatter_y=km['deipte (m)'], scatter_alpha=0.5, scatter_color='b', xtick='bottom')
+    plot_curve(plot=ax1, plot_curve=False, x_label='Density (g/cm3)', scatter=True, scatter_x=dd2, scatter_y=km['deipte (m)'], scatter_alpha=0.5, scatter_color='b', xtick='bottom', removelast=False)
     
     # Track 2: RHOB
-    plot_curve(plot=ax2, plot_curve=False, x_label='Porosity (%)', scatter=True, scatter_x=p2, scatter_y=km['deipte (m)'], scatter_alpha=0.5, grid_alpha=0.5, scatter_color='b', xtick='bottom')
+    plot_curve(plot=ax2, plot_curve=False, x_label='Porosity (%)', scatter=True, scatter_x=p2, scatter_y=km['deipte (m)'], scatter_alpha=0.5, grid_alpha=0.5, scatter_color='b', xtick='bottom', removelast=False)
     
     # Track 5: NPHI
-    plot_curve(plot=ax3, plot_curve=False, x_label='Permeability (mD)', scatter=True, scatter_x=p3, scatter_y=km['deipte (m)'], scatter_alpha=0.5, grid_alpha=0.5, scatter_color='b', x_scale='log', xtick='bottom')
+    plot_curve(plot=ax3, plot_curve=False, x_label='Permeability (mD)', scatter=True, scatter_x=p3, scatter_y=km['deipte (m)'], scatter_alpha=0.5, grid_alpha=0.5, scatter_color='b', x_scale='log', xtick='bottom', removelast=False)
     
     plt.show()
 
