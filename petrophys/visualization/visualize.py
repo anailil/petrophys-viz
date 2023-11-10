@@ -33,7 +33,8 @@ def plot_curve(plot, fig='', plot_curve=True, curve_type='', curve_depth='', sca
     if scatter and color_bar:
         scattered = plot.scatter(scatter_x,scatter_y,alpha=scatter_alpha,c=scatter_color, cmap=scatter_cmap)
         if color_bar:
-            cbar = fig.colorbar(scattered, ax=plot)
+            #cbar = fig.colorbar(scattered, ax=plot)
+            cbar = fig.colorbar()
             cbar.set_label(color_bar_label, rotation=color_bar_rotation)
 
     plot.set_xlabel(x_label,va = label_position)
