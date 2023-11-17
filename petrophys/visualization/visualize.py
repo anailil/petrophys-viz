@@ -120,13 +120,13 @@ def depth_intervals_cores(diepte, density, porosity, permeability):
     
     plt.show()
 
-def depth_intervals_porosity(km, x, y, xlabel, ylabel, clabel, graphlabel, yscale='linear', colormap='jet', orientation=270, aspect=0.45):
+def depth_intervals_porosity(color, x, y, xlabel, ylabel, clabel, graphlabel, yscale='linear', colormap='jet', orientation=270, aspect=0.45):
 
     f1 = plt.figure(figsize=plt.figaspect(aspect))
     plt.scatter(
         x=x,
         y=y,
-        c=km,
+        c=color,
         cmap=colormap)
     plt.title(graphlabel)
     plt.xlabel(xlabel)
