@@ -21,3 +21,12 @@ def convert_value_to_nan(arr: np.ndarray, value: float = -999.25):
     """
     arr[arr==value] = np.nan
     return arr
+
+def get_values(measure_data, data_key, mini=False, maxi=False):
+    value = np.array(measure_data[data_key], dtype=float)
+    if mini:
+        np.nanmin(value)
+    if maxi:
+        np.nanmax(value)
+
+    return value
