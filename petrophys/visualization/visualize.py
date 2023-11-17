@@ -19,7 +19,46 @@ def remove_last(ax, which='upper'):
     nbins = len(ax.get_xticklabels())
     ax.xaxis.set_major_locator(mpl.ticker.MaxNLocator(nbins=nbins, prune=which))
 
-def plot_curve(plot, fig='', plot_curve=True, curve_type='', curve_depth='', scatter=False, scatter_x='', scatter_y='', scatter_alpha=0.3, scatter_color='g', scatter_cmap='', color='r', x_label='', y_label='', graph_label='', graph_position='top', linewidth=0.5, label_position='top', grid=True, grid_color='g', grid_alpha=0.3, hide_tick=0, xlim_low=0.0, xlim_high=0.0, cores=[], core_linewidth=5.0, core_alpha=0.7, color_bar=False, color_bar_label='', color_bar_rotation=270, y_scale='linear', x_scale='linear', xtick='top', removelast=True):
+def plot_curve(fig, plot_curve=True, curve_type='', curve_depth='', scatter=False, scatter_x='', scatter_y='', scatter_alpha=0.3, scatter_color='g', scatter_cmap='', color='r', x_label='', y_label='', graph_label='', graph_position='top', linewidth=0.5, label_position='top', grid=True, grid_color='g', grid_alpha=0.3, hide_tick=0, xlim_low=0.0, xlim_high=0.0, cores=[], core_linewidth=5.0, core_alpha=0.7, color_bar=False, color_bar_label='', color_bar_rotation=270, y_scale='linear', x_scale='linear', xtick='top', removelast=True):
+
+    if cores != []:
+        fig.plot(*cores, linewidth=core_linewidth,alpha=core_alpha)
+
+    if plot_curve:
+        fig.plot(curve_type, curve_depth, color, label=graph_label, linewidth=linewidth)
+
+    if scatter and not color_bar:
+        fig.scatter(scatter_x,scatter_y,alpha=scatter_alpha,c=scatter_color)
+
+    if scatter and color_bar:
+        fig.scatter(scatter_x,scatter_y,alpha=scatter_alpha,c=scatter_color, cmap=scatter_cmap)
+        cbar = fig.colorbar()
+        cbar.set_label(color_bar_label, rotation=color_bar_rotation)
+
+    fig.xlabel(x_label,va = label_position)
+    fig.xscale(x_scale)
+    fig.ylabel(y_label)
+    fig.yscale(y_scale)
+    fig.title(graph_label)
+
+    if xtick == 'top':
+        fig.xaxis.tick_top()
+    else:
+        fig.xaxis.tick_bottom()
+
+    fig.xaxis.set_label_position(label_position)
+    fig.grid(grid, c=grid_color, alpha=grid_alpha)
+
+
+    if xlim_low != 0.0 or xlim_high != 0.0:
+        fig.xlim(xlim_low, xlim_high)
+    if hide_tick != 0:
+        fig.setp(plot.get_xticklabels()[1::hide_tick], visible=False)  # Hide every second tick-label
+
+    if removelast:
+        remove_last(fig) 
+
+def subplot_curve(plot, fig='', plot_curve=True, curve_type='', curve_depth='', scatter=False, scatter_x='', scatter_y='', scatter_alpha=0.3, scatter_color='g', scatter_cmap='', color='r', x_label='', y_label='', graph_label='', graph_position='top', linewidth=0.5, label_position='top', grid=True, grid_color='g', grid_alpha=0.3, hide_tick=0, xlim_low=0.0, xlim_high=0.0, cores=[], core_linewidth=5.0, core_alpha=0.7, color_bar=False, color_bar_label='', color_bar_rotation=270, y_scale='linear', x_scale='linear', xtick='top', removelast=True):
 
     if cores != []:
         plot.plot(*cores, linewidth=core_linewidth,alpha=core_alpha)
@@ -34,8 +73,8 @@ def plot_curve(plot, fig='', plot_curve=True, curve_type='', curve_depth='', sca
         #scattered = plot.scatter(scatter_x,scatter_y,alpha=scatter_alpha,c=scatter_color, cmap=scatter_cmap)
         scattered = plot.scatter(scatter_x,scatter_y,alpha=scatter_alpha,c=scatter_color, cmap="jet")
         if color_bar:
-            #cbar = fig.colorbar(scattered, ax=plot)
-            cbar = fig.colorbar(cmap="jet")
+            cbar = fig.colorbar(scattered, ax=plot, cmap="jet")
+            #cbar = fig.colorbar(cmap="jet")
             cbar.set_label(color_bar_label, rotation=color_bar_rotation)
 
     plot.set_xlabel(x_label,va = label_position)
@@ -74,19 +113,19 @@ def well_curve(lasfile):
     mpl.rcParams['xtick.labelsize'] = 6
     
     #track1: Gamma Ray
-    plot_curve(plot=ax1, curve_type=lasfile['GR'], curve_depth=lasfile['DEPT'], color='c', x_label='GR (API)', y_label='DEPTH (m)',hide_tick=2)
+    subplot_curve(plot=ax1, curve_type=lasfile['GR'], curve_depth=lasfile['DEPT'], color='c', x_label='GR (API)', y_label='DEPTH (m)',hide_tick=2)
     
     # Track 2: Sonic (velocities)
-    plot_curve(plot=ax2, curve_type=lasfile['DT']/0.3048, curve_depth=lasfile['DEPT'], color='r', x_label='DT (m/s)', y_label='DEPTH (m)', graph_label='DTCO')
+    subplot_curve(plot=ax2, curve_type=lasfile['DT']/0.3048, curve_depth=lasfile['DEPT'], color='r', x_label='DT (m/s)', y_label='DEPTH (m)', graph_label='DTCO')
     
     # Track 3: RHOB (Bulk Density)
-    plot_curve(plot=ax3, curve_type=lasfile['RHOB'], curve_depth=lasfile['DEPT'], color='b', x_label='RHOB (g/cm3', y_label='DEPTH (m)')
+    subplot_curve(plot=ax3, curve_type=lasfile['RHOB'], curve_depth=lasfile['DEPT'], color='b', x_label='RHOB (g/cm3', y_label='DEPTH (m)')
     
     # Track 4: DRHO
-    plot_curve(plot=ax4, curve_type=lasfile['DRHO'], curve_depth=lasfile['DEPT'], color='g', x_label='DRHO (g/cm3)', y_label='DEPTH (m)')
+    subplot_curve(plot=ax4, curve_type=lasfile['DRHO'], curve_depth=lasfile['DEPT'], color='g', x_label='DRHO (g/cm3)', y_label='DEPTH (m)')
     
     # Track 5: NPHI
-    plot_curve(plot=ax5, curve_type=lasfile['NPHI'], curve_depth=lasfile['DEPT'], color='k', x_label='NPHI (v/v)', y_label='DEPTH (m)')
+    subplot_curve(plot=ax5, curve_type=lasfile['NPHI'], curve_depth=lasfile['DEPT'], color='k', x_label='NPHI (v/v)', y_label='DEPTH (m)')
     
     plt.show()
 
@@ -104,13 +143,13 @@ def petro_measure_curve(lasfile, km, dd2, c):
     mpl.rcParams['xtick.labelsize'] = 6
     
     #track1: Gamma Ray
-    plot_curve(plot=ax1, curve_type=lasfile['GR'], curve_depth=lasfile['DEPT'], color='k', x_label='GR (API)', y_label='DEPTH (m)',linewidth=1.0,hide_tick=2, cores=c)
+    subplot_curve(plot=ax1, curve_type=lasfile['GR'], curve_depth=lasfile['DEPT'], color='k', x_label='GR (API)', y_label='DEPTH (m)',linewidth=1.0,hide_tick=2, cores=c)
     
     # Track 2: RHOB
-    plot_curve(plot=ax2, curve_type=lasfile['RHOB'], curve_depth=lasfile['DEPT'], color='b', x_label='Density (g/cm3)', scatter=True, scatter_x=dd2, scatter_y=km['deipte (m)'], linewidth=1.0, hide_tick=2, xlim_low=2.3, xlim_high=3.0)
+    subplot_curve(plot=ax2, curve_type=lasfile['RHOB'], curve_depth=lasfile['DEPT'], color='b', x_label='Density (g/cm3)', scatter=True, scatter_x=dd2, scatter_y=km['deipte (m)'], linewidth=1.0, hide_tick=2, xlim_low=2.3, xlim_high=3.0)
     
     # Track 5: NPHI
-    plot_curve(plot=ax3, curve_type=lasfile['NPHI']*100, curve_depth=lasfile['DEPT'], color='c', x_label='Porosity (%)', linewidth=1.0, scatter=True, scatter_x=km['Porositeit (%)'], scatter_y=km['deipte (m)'], scatter_alpha=0.6, scatter_color='b', xlim_high=20)
+    subplot_curve(plot=ax3, curve_type=lasfile['NPHI']*100, curve_depth=lasfile['DEPT'], color='c', x_label='Porosity (%)', linewidth=1.0, scatter=True, scatter_x=km['Porositeit (%)'], scatter_y=km['deipte (m)'], scatter_alpha=0.6, scatter_color='b', xlim_high=20)
     
     plt.show()
 
@@ -124,21 +163,20 @@ def depth_intervals_cores(km, dd2, p2, p3):
     mpl.rcParams['xtick.labelsize'] = 6
     
     #track1: RHOB
-    plot_curve(plot=ax1, plot_curve=False, x_label='Density (g/cm3)', scatter=True, scatter_x=dd2, scatter_y=km['deipte (m)'], scatter_alpha=0.5, scatter_color='b', xtick='bottom', removelast=False)
+    subplot_curve(plot=ax1, plot_curve=False, x_label='Density (g/cm3)', scatter=True, scatter_x=dd2, scatter_y=km['deipte (m)'], scatter_alpha=0.5, scatter_color='b', xtick='bottom', removelast=False)
     
     # Track 2: RHOB
-    plot_curve(plot=ax2, plot_curve=False, x_label='Porosity (%)', scatter=True, scatter_x=p2, scatter_y=km['deipte (m)'], scatter_alpha=0.5, grid_alpha=0.5, scatter_color='b', xtick='bottom', removelast=False)
+    subplot_curve(plot=ax2, plot_curve=False, x_label='Porosity (%)', scatter=True, scatter_x=p2, scatter_y=km['deipte (m)'], scatter_alpha=0.5, grid_alpha=0.5, scatter_color='b', xtick='bottom', removelast=False)
     
     # Track 5: NPHI
-    plot_curve(plot=ax3, plot_curve=False, x_label='Permeability (mD)', scatter=True, scatter_x=p3, scatter_y=km['deipte (m)'], scatter_alpha=0.5, grid_alpha=0.5, scatter_color='b', x_scale='log', xtick='bottom', removelast=False)
+    subplot_curve(plot=ax3, plot_curve=False, x_label='Permeability (mD)', scatter=True, scatter_x=p3, scatter_y=km['deipte (m)'], scatter_alpha=0.5, grid_alpha=0.5, scatter_color='b', x_scale='log', xtick='bottom', removelast=False)
     
     plt.show()
 
 def depth_intervals_porosity(km, x, y, xlabel, ylabel, graphlabel, yscale):
 
-    f1, ax1 = plt.subplots(figsize=plt.figaspect(0.45))
+    f1 = plt.figure(figsize=plt.figaspect(0.45))
     
     #track1: porosity
-    plot_curve(plot=ax1, fig=f1, plot_curve=False, x_label=xlabel, y_label=ylabel, graph_label = graphlabel, scatter=True, scatter_x=x, scatter_y=y, scatter_color=km['deipte (m)'], scatter_cmap="jet", color_bar=True, color_bar_label='Depth (m)', label_position='bottom', y_scale=yscale)
+    plot_curve(fig=f1, plot_curve=False, x_label=xlabel, y_label=ylabel, graph_label = graphlabel, scatter=True, scatter_x=x, scatter_y=y, scatter_color=km['deipte (m)'], scatter_cmap="jet", color_bar=True, color_bar_label='Depth (m)', label_position='bottom', y_scale=yscale)
     
-    plt.show()
