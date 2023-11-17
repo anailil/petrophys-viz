@@ -19,46 +19,7 @@ def remove_last(ax, which='upper'):
     nbins = len(ax.get_xticklabels())
     ax.xaxis.set_major_locator(mpl.ticker.MaxNLocator(nbins=nbins, prune=which))
 
-def plot_curve(fig, plot_curve=True, curve_type='', curve_depth='', scatter=False, scatter_x='', scatter_y='', scatter_alpha=0.3, scatter_color='g', scatter_cmap='', color='r', x_label='', y_label='', graph_label='', graph_position='top', linewidth=0.5, label_position='top', grid=True, grid_color='g', grid_alpha=0.3, hide_tick=0, xlim_low=0.0, xlim_high=0.0, cores=[], core_linewidth=5.0, core_alpha=0.7, color_bar=False, color_bar_label='', color_bar_rotation=270, y_scale='linear', x_scale='linear', xtick='top', removelast=True):
-
-    if cores != []:
-        fig.plot(*cores, linewidth=core_linewidth,alpha=core_alpha)
-
-    if plot_curve:
-        fig.plot(curve_type, curve_depth, color, label=graph_label, linewidth=linewidth)
-
-    if scatter and not color_bar:
-        fig.scatter(scatter_x,scatter_y,alpha=scatter_alpha,c=scatter_color)
-
-    if scatter and color_bar:
-        fig.scatter(scatter_x,scatter_y,alpha=scatter_alpha,c=scatter_color, cmap=scatter_cmap)
-        cbar = fig.colorbar()
-        cbar.set_label(color_bar_label, rotation=color_bar_rotation)
-
-    fig.xlabel(x_label,va = label_position)
-    fig.xscale(x_scale)
-    fig.ylabel(y_label)
-    fig.yscale(y_scale)
-    fig.title(graph_label)
-
-    if xtick == 'top':
-        fig.xaxis.tick_top()
-    else:
-        fig.xaxis.tick_bottom()
-
-    fig.xaxis.set_label_position(label_position)
-    fig.grid(grid, c=grid_color, alpha=grid_alpha)
-
-
-    if xlim_low != 0.0 or xlim_high != 0.0:
-        fig.xlim(xlim_low, xlim_high)
-    if hide_tick != 0:
-        fig.setp(plot.get_xticklabels()[1::hide_tick], visible=False)  # Hide every second tick-label
-
-    if removelast:
-        remove_last(fig) 
-
-def subplot_curve(plot, fig='', plot_curve=True, curve_type='', curve_depth='', scatter=False, scatter_x='', scatter_y='', scatter_alpha=0.3, scatter_color='g', scatter_cmap='', color='r', x_label='', y_label='', graph_label='', graph_position='top', linewidth=0.5, label_position='top', grid=True, grid_color='g', grid_alpha=0.3, hide_tick=0, xlim_low=0.0, xlim_high=0.0, cores=[], core_linewidth=5.0, core_alpha=0.7, color_bar=False, color_bar_label='', color_bar_rotation=270, y_scale='linear', x_scale='linear', xtick='top', removelast=True):
+def subplot_curve(plot, plot_curve=True, curve_type='', curve_depth='', scatter=False, scatter_x='', scatter_y='', scatter_alpha=0.3, scatter_color='g', scatter_cmap='', color='r', x_label='', y_label='', graph_label='', graph_position='top', linewidth=0.5, label_position='top', grid=True, grid_color='g', grid_alpha=0.3, hide_tick=0, xlim_low=0.0, xlim_high=0.0, cores=[], core_linewidth=5.0, core_alpha=0.7, color_bar=False, color_bar_label='', color_bar_rotation=270, y_scale='linear', x_scale='linear', xtick='top', removelast=True):
 
     if cores != []:
         plot.plot(*cores, linewidth=core_linewidth,alpha=core_alpha)
@@ -66,16 +27,8 @@ def subplot_curve(plot, fig='', plot_curve=True, curve_type='', curve_depth='', 
     if plot_curve:
         plot.plot(curve_type, curve_depth, color, label=graph_label, linewidth=linewidth)
 
-    if scatter and not color_bar:
+    if scatter:
         plot.scatter(scatter_x,scatter_y,alpha=scatter_alpha,c=scatter_color)
-
-    if scatter and color_bar:
-        #scattered = plot.scatter(scatter_x,scatter_y,alpha=scatter_alpha,c=scatter_color, cmap=scatter_cmap)
-        scattered = plot.scatter(scatter_x,scatter_y,alpha=scatter_alpha,c=scatter_color, cmap="jet")
-        if color_bar:
-            cbar = fig.colorbar(scattered, ax=plot, cmap="jet")
-            #cbar = fig.colorbar(cmap="jet")
-            cbar.set_label(color_bar_label, rotation=color_bar_rotation)
 
     plot.set_xlabel(x_label,va = label_position)
     plot.set_xscale(x_scale)
@@ -173,10 +126,17 @@ def depth_intervals_cores(km, dd2, p2, p3):
     
     plt.show()
 
-def depth_intervals_porosity(km, x, y, xlabel, ylabel, graphlabel, yscale):
+def depth_intervals_porosity(km, x, y, xlabel, ylabel, clabel, graphlabel, yscale='linear', colormap='jet', orientation=270, aspect=0.45):
 
-    f1 = plt.figure(figsize=plt.figaspect(0.45))
-    
-    #track1: porosity
-    plot_curve(fig=f1, plot_curve=False, x_label=xlabel, y_label=ylabel, graph_label = graphlabel, scatter=True, scatter_x=x, scatter_y=y, scatter_color=km['deipte (m)'], scatter_cmap="jet", color_bar=True, color_bar_label='Depth (m)', label_position='bottom', y_scale=yscale)
-    
+    f1 = plt.figure(figsize=plt.figaspect(aspect))
+    plt.scatter(
+        x=x,
+        y=y,
+        c=km,
+        cmap=colormap)
+    plt.title(graphlabel)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.yscale(yscale)
+    cbar = plt.colorbar()
+    cbar.set_label(clabel,rotation=orientation)
