@@ -74,7 +74,9 @@ def well_curve(lasfile):
     # Track 5: NPHI
     subplot_curve(plot=ax5, curve_type=lasfile['NPHI'], curve_depth=lasfile['DEPT'], color='k', x_label='NPHI (v/v)', y_label='DEPTH (m)')
     
-    plt.show()
+    #plt.show()
+    #plt.savefig('well-curve.pdf')
+    return plt
 
 def petro_measure_curve(lasfile, depth, density, porosity, c):
 
