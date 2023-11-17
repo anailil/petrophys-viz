@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def convert_value_to_nan(arr: np.ndarray, value: float = -999.25) -> np.ndarray:
+def convert_value_to_nan(arr: np.ndarray, value: float = -999.25):
     """Convert all entries of value to NaN.
 
     E.g. null = -999.25
@@ -19,5 +19,5 @@ def convert_value_to_nan(arr: np.ndarray, value: float = -999.25) -> np.ndarray:
     np.ndarray
 
     """
-    arr_with_nan = np.where(arr == value, np.nan, arr)
-    return arr_with_nan
+    arr[arr==value] = np.nan
+    return arr

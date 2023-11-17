@@ -1,11 +1,5 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-import numpy as np
-
-def valtonan(inp, val=-999.25):
-    """Convert all 'val' to NaN's."""
-    inp[inp==val] = np.nan
-    return inp
 
 #This function makes for cleaner axis plotting
 def remove_last(ax, which='upper'):
