@@ -76,12 +76,12 @@ def well_curve(lasfile):
     
     plt.show()
 
-def petro_measure_curve(lasfile, km, dd2, c):
+def petro_measure_curve(lasfile, diepte, density, porosity, c):
 
     f1, (ax1, ax2, ax3) = plt.subplots(1, 3, sharey=True, figsize=(8,7))
     f1.subplots_adjust(wspace=0.1)
     plt.gca().invert_yaxis()
-    plt.ylim(km['deipte (m)'].max()+15,km['deipte (m)'].min()-10)
+    plt.ylim(diepte.max()+15,diepte.min()-10)
     
     # So that y-tick labels appear on left and right
     plt.tick_params(labelright=True)
@@ -93,14 +93,14 @@ def petro_measure_curve(lasfile, km, dd2, c):
     subplot_curve(plot=ax1, curve_type=lasfile['GR'], curve_depth=lasfile['DEPT'], color='k', x_label='GR (API)', y_label='DEPTH (m)',linewidth=1.0,hide_tick=2, cores=c)
     
     # Track 2: RHOB
-    subplot_curve(plot=ax2, curve_type=lasfile['RHOB'], curve_depth=lasfile['DEPT'], color='b', x_label='Density (g/cm3)', scatter=True, scatter_x=dd2, scatter_y=km['deipte (m)'], linewidth=1.0, hide_tick=2, xlim_low=2.3, xlim_high=3.0)
+    subplot_curve(plot=ax2, curve_type=lasfile['RHOB'], curve_depth=lasfile['DEPT'], color='b', x_label='Density (g/cm3)', scatter=True, scatter_x=density, scatter_y=diepte, linewidth=1.0, hide_tick=2, xlim_low=2.3, xlim_high=3.0)
     
     # Track 5: NPHI
-    subplot_curve(plot=ax3, curve_type=lasfile['NPHI']*100, curve_depth=lasfile['DEPT'], color='c', x_label='Porosity (%)', linewidth=1.0, scatter=True, scatter_x=km['Porositeit (%)'], scatter_y=km['deipte (m)'], scatter_alpha=0.6, scatter_color='b', xlim_high=20)
+    subplot_curve(plot=ax3, curve_type=lasfile['NPHI']*100, curve_depth=lasfile['DEPT'], color='c', x_label='Porosity (%)', linewidth=1.0, scatter=True, scatter_x=porosity, scatter_y=diepte, scatter_alpha=0.6, scatter_color='b', xlim_high=20)
     
     plt.show()
 
-def depth_intervals_cores(km, dd2, p2, p3):
+def depth_intervals_cores(diepte, density, porosity, permeability):
 
     f1, (ax1, ax2, ax3) = plt.subplots(3, 1, sharey=True, figsize=(9,14))
 
@@ -110,13 +110,13 @@ def depth_intervals_cores(km, dd2, p2, p3):
     mpl.rcParams['xtick.labelsize'] = 6
     
     #track1: RHOB
-    subplot_curve(plot=ax1, plot_curve=False, x_label='Density (g/cm3)', scatter=True, scatter_x=dd2, scatter_y=km['deipte (m)'], scatter_alpha=0.5, scatter_color='b', xtick='bottom', removelast=False)
+    subplot_curve(plot=ax1, plot_curve=False, x_label='Density (g/cm3)', scatter=True, scatter_x=density, scatter_y=diepte, scatter_alpha=0.5, scatter_color='b', xtick='bottom', removelast=False)
     
     # Track 2: RHOB
-    subplot_curve(plot=ax2, plot_curve=False, x_label='Porosity (%)', scatter=True, scatter_x=p2, scatter_y=km['deipte (m)'], scatter_alpha=0.5, grid_alpha=0.5, scatter_color='b', xtick='bottom', removelast=False)
+    subplot_curve(plot=ax2, plot_curve=False, x_label='Porosity (%)', scatter=True, scatter_x=porosity, scatter_y=diepte, scatter_alpha=0.5, grid_alpha=0.5, scatter_color='b', xtick='bottom', removelast=False)
     
     # Track 5: NPHI
-    subplot_curve(plot=ax3, plot_curve=False, x_label='Permeability (mD)', scatter=True, scatter_x=p3, scatter_y=km['deipte (m)'], scatter_alpha=0.5, grid_alpha=0.5, scatter_color='b', x_scale='log', xtick='bottom', removelast=False)
+    subplot_curve(plot=ax3, plot_curve=False, x_label='Permeability (mD)', scatter=True, scatter_x=permeability, scatter_y=diepte, scatter_alpha=0.5, grid_alpha=0.5, scatter_color='b', x_scale='log', xtick='bottom', removelast=False)
     
     plt.show()
 
