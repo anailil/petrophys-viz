@@ -114,7 +114,7 @@ def depth_intervals_cores(x_ax, y_ax, xlabel='', ylabel='', xscale='linear'):
     #track
     subplot_curve(plot=ax1, plot_curve=False, x_label=xlabel, y_label=ylabel, scatter=True, scatter_x=x_ax, scatter_y=y_ax, scatter_alpha=0.5, scatter_color='b', x_scale=xscale, xtick='bottom', removelast=False)
     
-    return f1 
+    return f1, ax1
 
 def depth_intervals_porosity(color, x, y, xlabel, ylabel, clabel, graphlabel, yscale='linear', colormap='jet', orientation=270, aspect=0.45):
 
