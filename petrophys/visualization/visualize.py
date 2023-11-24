@@ -76,7 +76,7 @@ def well_curve(lasfile):
     
     #plt.show()
     #plt.savefig('well-curve.pdf')
-    return plt
+    return f1
 
 def petro_measure_curve(lasfile, depth, density, porosity, c):
 
@@ -102,25 +102,19 @@ def petro_measure_curve(lasfile, depth, density, porosity, c):
     
     plt.show()
 
-def depth_intervals_cores(depth, density, porosity, permeability):
+def depth_intervals_cores(x_ax, y_ax, xlabel='', ylabel='', xscale='linear'):
 
-    f1, (ax1, ax2, ax3) = plt.subplots(3, 1, sharey=True, figsize=(9,14))
+    f1, (ax1) = plt.subplots(1, 1, figsize=(9,5))
 
     plt.gca().invert_yaxis()
     
     # Change tick-label globally
     mpl.rcParams['xtick.labelsize'] = 6
     
-    #track1: RHOB
-    subplot_curve(plot=ax1, plot_curve=False, x_label='Density (g/cm3)', scatter=True, scatter_x=density, scatter_y=depth, scatter_alpha=0.5, scatter_color='b', xtick='bottom', removelast=False)
+    #track
+    subplot_curve(plot=ax1, plot_curve=False, x_label=xlabel, y_label=ylabel, scatter=True, scatter_x=x_ax, scatter_y=y_ax, scatter_alpha=0.5, scatter_color='b', x_scale=xscale, xtick='bottom', removelast=False)
     
-    # Track 2: RHOB
-    subplot_curve(plot=ax2, plot_curve=False, x_label='Porosity (%)', scatter=True, scatter_x=porosity, scatter_y=depth, scatter_alpha=0.5, grid_alpha=0.5, scatter_color='b', xtick='bottom', removelast=False)
-    
-    # Track 5: NPHI
-    subplot_curve(plot=ax3, plot_curve=False, x_label='Permeability (mD)', scatter=True, scatter_x=permeability, scatter_y=depth, scatter_alpha=0.5, grid_alpha=0.5, scatter_color='b', x_scale='log', xtick='bottom', removelast=False)
-    
-    plt.show()
+    return f1 
 
 def depth_intervals_porosity(color, x, y, xlabel, ylabel, clabel, graphlabel, yscale='linear', colormap='jet', orientation=270, aspect=0.45):
 
@@ -136,3 +130,5 @@ def depth_intervals_porosity(color, x, y, xlabel, ylabel, clabel, graphlabel, ys
     plt.yscale(yscale)
     cbar = plt.colorbar()
     cbar.set_label(clabel,rotation=orientation)
+
+    return f1
