@@ -77,7 +77,27 @@ def well_curve(lasfile):
     
     plt.show()
 
-def petro_measure_curve(lasfile, depth, density, porosity, c):
+def petro_measure_curve(lasfile, depth, density, porosity, cores):
+    """ Plots the GR, RHOB and NPHI graphs of the given lasio file
+        It adds a scattered graph of depth vs density and depth vs porosity
+        with the given depth, density and porosity in seperate lists
+        It also plots the position of the cores given in cores
+    
+    Parameters
+    ----------
+    lasfile: lasio dataset
+    depth: list
+    density: list
+    porosity: list
+    cores: csv table
+
+    """
+
+    # We are making an array of top and bottom depths to plot the core intervals (m)
+    # (x1, x2), (bottom, top), 'color'
+    c = [(0, 0), (cores['Bottom'][0], cores['Top'][0]), 'b',
+         (0, 0), (cores['Bottom'][1], cores['Top'][1]), 'r', 
+         (0, 0), (cores['Bottom'][2], cores['Top'][2]), 'g']
 
     f1, (ax1, ax2, ax3) = plt.subplots(1, 3, sharey=True, figsize=(8,7))
     f1.subplots_adjust(wspace=0.1)
