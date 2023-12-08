@@ -49,7 +49,13 @@ def subplot_curve(plot, plot_curve=True, curve_type='', curve_depth='', scatter=
         remove_last(plot) 
 
 def well_curve(lasfile):
+    """ Plots the GR, DT, RHOB, DRHO and NPHI vs Depth graphs of the given lasio file
+    
+    Parameters
+    ----------
+    lasfile: lasio dataset
 
+    """
     f1, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1, 5, sharey=True, figsize=(18,16))
     f1.subplots_adjust(wspace=0.02)
     plt.gca().invert_yaxis()
