@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-#This function makes for cleaner axis plotting
 def remove_last(ax, which='upper'):
     """Remove <which> from x-axis of <ax>.
+
+       This function makes cleaner axis plotting
     
     Parameters
     ----------
@@ -74,9 +75,7 @@ def well_curve(lasfile):
     # Track 5: NPHI
     subplot_curve(plot=ax5, curve_type=lasfile['NPHI'], curve_depth=lasfile['DEPT'], color='k', x_label='NPHI (v/v)', y_label='DEPTH (m)')
     
-    #plt.show()
-    #plt.savefig('well-curve.pdf')
-    return f1
+    plt.show()
 
 def petro_measure_curve(lasfile, depth, density, porosity, c):
 
@@ -114,21 +113,58 @@ def depth_intervals_cores(x_ax, y_ax, xlabel='', ylabel='', xscale='linear'):
     #track
     subplot_curve(plot=ax1, plot_curve=False, x_label=xlabel, y_label=ylabel, scatter=True, scatter_x=x_ax, scatter_y=y_ax, scatter_alpha=0.5, scatter_color='b', x_scale=xscale, xtick='bottom', removelast=False)
     
-    return f1, ax1
+    plt.show()
 
-def depth_intervals_porosity(color, x, y, xlabel, ylabel, clabel, graphlabel, yscale='linear', colormap='jet', orientation=270, aspect=0.45):
+def depth_intervals_porosity(x, y, c, xlabel='', ylabel='', clabel='', graphlabel='', xscale='linear', yscale='linear', colormap='jet', orientation=270, aspect=0.45):
+    """Plot a scattered graph for the x, y and c data
+
+    Parameters
+    ----------
+    x: list of floats or integers
+        x represents the x axes of the graph
+    y: list of floats or integers
+        y represents the y axes of the graph
+    c: list of floats or integers
+        c represents the color of the dots in the graph
+    xlabel: str
+        label printed on the x axes
+    ylabel: str
+        label printed on the y axes
+    clabel: str
+        label printed on the colormap
+    graphlabel: str
+        label printed on top of the graph
+    xscale: str
+        scale of the x axes, can take "linear' or 'log'
+        default is linear
+    yscale: str
+        scale of the y axes, can take "linear' or 'log'
+        default is linear
+    colormap: str
+        colormap to use for the dots
+        see https://matplotlib.org/stable/users/explain/colors/colormaps.html for options
+        default is jet
+    orientation: int or float
+        orientation of the clabel in degrees
+        default is 270
+    aspect: float
+        Set the aspect ratio of the axes scaling, i.e. y/x-scale.
+        default is 0.45
+
+    """
 
     f1 = plt.figure(figsize=plt.figaspect(aspect))
     plt.scatter(
         x=x,
         y=y,
-        c=color,
+        c=c,
         cmap=colormap)
     plt.title(graphlabel)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
+    plt.xscale(xscale)
     plt.yscale(yscale)
     cbar = plt.colorbar()
     cbar.set_label(clabel,rotation=orientation)
 
-    return f1
+    plt.show()
