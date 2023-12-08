@@ -14,13 +14,95 @@ def remove_last(ax, which='upper'):
     nbins = len(ax.get_xticklabels())
     ax.xaxis.set_major_locator(mpl.ticker.MaxNLocator(nbins=nbins, prune=which))
 
-def subplot_curve(plot, plot_curve=True, curve_type='', curve_depth='', scatter=False, scatter_x='', scatter_y='', scatter_alpha=0.3, scatter_color='g', scatter_cmap='', color='r', x_label='', y_label='', graph_label='', graph_position='top', linewidth=0.5, label_position='top', grid=True, grid_color='g', grid_alpha=0.3, hide_tick=0, xlim_low=0.0, xlim_high=0.0, cores=[], core_linewidth=5.0, core_alpha=0.7, color_bar=False, color_bar_label='', color_bar_rotation=270, y_scale='linear', x_scale='linear', xtick='top', removelast=True):
+def subplot_curve(plot, plot_curve=True, xdata='', ydata='', color='r', scatter=False, scatter_x='', scatter_y='', scatter_alpha=0.3, scatter_color='g', x_label='', y_label='', graph_label='', graph_position='top', linewidth=0.5, label_position='top', grid=True, grid_color='g', grid_alpha=0.3, hide_tick=0, xlim_low=0.0, xlim_high=0.0, cores=[], core_linewidth=5.0, core_alpha=0.7, x_scale='linear', y_scale='linear', xtick='top', removelast=True):
+    """Function to plot a graph based on the given parameters
+
+    Parameters
+    ----------
+    plot: figure 
+    plot_curve: Boolean
+        Defines wether or not to plot a curve
+        Default is True
+    xdata=: list of floats or integers
+        Represents the x axes of the graph
+    ydata=: list of floats or integers
+        Represents the y axes of the graph
+    color: str
+        color of the graph line
+        see https://matplotlib.org/stable/gallery/color/named_colors.html or 
+            https://matplotlib.org/stable/users/explain/colors/colors.html for color options
+        Default is red. 
+    scatter: Boolean
+        Defines wether or not to plot a scatter graph
+        Default is False
+    scatter_x: list of floats or integers
+        Represents the x axes of the graph
+    scatter_y: list of floats or integers
+        Represents the y axes of the graph
+    scatter_alpha: float, default is 0.3 
+        Alpha adds transparency to a color, the range is from 0.0-1.0.
+    scatter_color: str
+        color of the dots
+        see https://matplotlib.org/stable/gallery/color/named_colors.html or 
+            https://matplotlib.org/stable/users/explain/colors/colors.html for color options
+    x_label: str
+        label printed on the x axes
+        Default is empty
+    y_label: str
+        label printed on the y axes
+        Default is empty
+    graph_label: str
+        Title of the graph.
+        Default is empty
+    graph_position='top', 
+    linewidth: float
+        Defines the linewidth of the graph
+        Default is 0.5
+    label_position='top', 
+    grid: Boolean
+        Defines wether or not to show a grid. 
+        Default = True
+    grid_color: str
+        color of the grid
+        see https://matplotlib.org/stable/gallery/color/named_colors.html or 
+            https://matplotlib.org/stable/users/explain/colors/colors.html for color options
+    grid_alpha=: float, default is 0.3 
+        Alpha adds transparency to a color, the range is from 0.0-1.0.
+    hide_tick: integer
+        Defines ticks to skip in the x axes. . 
+        default is 0
+    xlim_low: float
+        sets the low limit of the x axes
+        default is 0.0
+    xlim_high: float
+        sets the high limit of the x axes
+        default is 0.0
+    cores: list
+        definition of the cores to plot. 
+    core_linewidth: float
+        Defines the thickness of the cores line
+    core_alpha: float
+        Alpha adds transparency to a color, the range is from 0.0-1.0.
+    x_scale: str
+        scale of the x axes, can take "linear' or 'log'
+        default is linear
+    y_scale: str
+        scale of the y axes, can take "linear' or 'log'
+        default is linear
+    xtick: str
+        Defines the place of the ticks on the x axes. 
+        Takes 'top' for top or any other for bottom. 
+        default is top.
+    removelast: Boolean
+        Wether or not to call the removelast function for cleaner graphs. 
+        default is True
+    """
 
     if cores != []:
         plot.plot(*cores, linewidth=core_linewidth,alpha=core_alpha)
 
     if plot_curve:
-        plot.plot(curve_type, curve_depth, color, label=graph_label, linewidth=linewidth)
+        plot.plot(xdata, ydata, color, label=graph_label, linewidth=linewidth)
 
     if scatter:
         plot.scatter(scatter_x,scatter_y,alpha=scatter_alpha,c=scatter_color)
@@ -43,20 +125,24 @@ def subplot_curve(plot, plot_curve=True, curve_type='', curve_depth='', scatter=
     if xlim_low != 0.0 or xlim_high != 0.0:
         plot.set_xlim(xlim_low, xlim_high)
     if hide_tick != 0:
-        plt.setp(plot.get_xticklabels()[1::hide_tick], visible=False)  # Hide every second tick-label
+        plt.setp(plot.get_xticklabels()[1::hide_tick], visible=False)  # Hide ticks defined by every hide_tick
 
     if removelast:
         remove_last(plot) 
 
-def well_curve(lasfile):
+def well_curve(lasfile, xsize=18, ysize=16), :
     """ Plots the GR, DT, RHOB, DRHO and NPHI vs Depth graphs of the given lasio file
     
     Parameters
     ----------
     lasfile: lasio dataset
+    xsize: float or integer
+        size of the figure in the horizontal direction
+    ysize: float or integer
+        size of the figure in the vertical direction
 
     """
-    f1, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1, 5, sharey=True, figsize=(18,16))
+    f1, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1, 5, sharey=True, figsize=(xsize,ysize))
     f1.subplots_adjust(wspace=0.02)
     plt.gca().invert_yaxis()
     
@@ -67,19 +153,19 @@ def well_curve(lasfile):
     mpl.rcParams['xtick.labelsize'] = 6
     
     #track1: Gamma Ray
-    subplot_curve(plot=ax1, curve_type=lasfile['GR'], curve_depth=lasfile['DEPT'], color='c', x_label='GR (API)', y_label='DEPTH (m)',hide_tick=2)
+    subplot_curve(plot=ax1, xdata=lasfile['GR'], ydata=lasfile['DEPT'], color='c', x_label='GR (API)', y_label='DEPTH (m)',hide_tick=2)
     
     # Track 2: Sonic (velocities)
-    subplot_curve(plot=ax2, curve_type=lasfile['DT']/0.3048, curve_depth=lasfile['DEPT'], color='r', x_label='DT (m/s)', y_label='DEPTH (m)', graph_label='DTCO')
+    subplot_curve(plot=ax2, xdata=lasfile['DT']/0.3048, ydata=lasfile['DEPT'], color='r', x_label='DT (m/s)', y_label='DEPTH (m)', graph_label='DTCO')
     
     # Track 3: RHOB (Bulk Density)
-    subplot_curve(plot=ax3, curve_type=lasfile['RHOB'], curve_depth=lasfile['DEPT'], color='b', x_label='RHOB (g/cm3', y_label='DEPTH (m)')
+    subplot_curve(plot=ax3, xdata=lasfile['RHOB'], ydata=lasfile['DEPT'], color='b', x_label='RHOB (g/cm3', y_label='DEPTH (m)')
     
     # Track 4: DRHO
-    subplot_curve(plot=ax4, curve_type=lasfile['DRHO'], curve_depth=lasfile['DEPT'], color='g', x_label='DRHO (g/cm3)', y_label='DEPTH (m)')
+    subplot_curve(plot=ax4, xdata=lasfile['DRHO'], ydata=lasfile['DEPT'], color='g', x_label='DRHO (g/cm3)', y_label='DEPTH (m)')
     
     # Track 5: NPHI
-    subplot_curve(plot=ax5, curve_type=lasfile['NPHI'], curve_depth=lasfile['DEPT'], color='k', x_label='NPHI (v/v)', y_label='DEPTH (m)')
+    subplot_curve(plot=ax5, xdata=lasfile['NPHI'], ydata=lasfile['DEPT'], color='k', x_label='NPHI (v/v)', y_label='DEPTH (m)')
     
     plt.show()
 
@@ -117,13 +203,13 @@ def petro_measure_curve(lasfile, depth, density, porosity, cores):
     mpl.rcParams['xtick.labelsize'] = 6
     
     #track1: Gamma Ray
-    subplot_curve(plot=ax1, curve_type=lasfile['GR'], curve_depth=lasfile['DEPT'], color='k', x_label='GR (API)', y_label='DEPTH (m)',linewidth=1.0,hide_tick=2, cores=c)
+    subplot_curve(plot=ax1, xdata=lasfile['GR'], ydata=lasfile['DEPT'], color='k', x_label='GR (API)', y_label='DEPTH (m)',linewidth=1.0,hide_tick=2, cores=c)
     
     # Track 2: RHOB
-    subplot_curve(plot=ax2, curve_type=lasfile['RHOB'], curve_depth=lasfile['DEPT'], color='b', x_label='Density (g/cm3)', scatter=True, scatter_x=density, scatter_y=depth, linewidth=1.0, hide_tick=2, xlim_low=2.3, xlim_high=3.0)
+    subplot_curve(plot=ax2, xdata=lasfile['RHOB'], ydata=lasfile['DEPT'], color='b', x_label='Density (g/cm3)', scatter=True, scatter_x=density, scatter_y=depth, linewidth=1.0, hide_tick=2, xlim_low=2.3, xlim_high=3.0)
     
     # Track 5: NPHI
-    subplot_curve(plot=ax3, curve_type=lasfile['NPHI']*100, curve_depth=lasfile['DEPT'], color='c', x_label='Porosity (%)', linewidth=1.0, scatter=True, scatter_x=porosity, scatter_y=depth, scatter_alpha=0.6, scatter_color='b', xlim_high=20)
+    subplot_curve(plot=ax3, xdata=lasfile['NPHI']*100, ydata=lasfile['DEPT'], color='c', x_label='Porosity (%)', linewidth=1.0, scatter=True, scatter_x=porosity, scatter_y=depth, scatter_alpha=0.6, scatter_color='b', xlim_high=20)
     
     plt.show()
 
