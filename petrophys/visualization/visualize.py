@@ -101,9 +101,36 @@ def petro_measure_curve(lasfile, depth, density, porosity, c):
     
     plt.show()
 
-def depth_intervals_cores(x_ax, y_ax, xlabel='', ylabel='', xscale='linear'):
+def depth_intervals_cores(xdata, ydata, xlabel='', ylabel='', xscale='linear', yscale='linear', xsize=9, ysize=5, color='b'):
+    """Plot a scattered graph for xdata and ydata
 
-    f1, (ax1) = plt.subplots(1, 1, figsize=(9,5))
+    Parameters
+    ----------
+    xdata: list of floats or integers
+        xdata represents the x axes of the graph
+    ydata: list of floats or integers
+        ydata represents the y axes of the graph
+    xlabel: str
+        label printed on the x axes
+    ylabel: str
+        label printed on the y axes
+    xscale: str
+        scale of the x axes, can take "linear' or 'log'
+        default is linear
+    yscale: str
+        scale of the y axes, can take "linear' or 'log'
+        default is linear
+    xsize: float or integer
+        size of the figure in the horizontal direction
+    ysize: float or integer
+        size of the figure in the vertical direction
+    color: str
+        color of the dots
+        see https://matplotlib.org/stable/gallery/color/named_colors.html or 
+            https://matplotlib.org/stable/users/explain/colors/colors.html for color options
+    """
+
+    f1, (ax1) = plt.subplots(1, 1, figsize=(xsize,ysize))
 
     plt.gca().invert_yaxis()
     
@@ -111,21 +138,21 @@ def depth_intervals_cores(x_ax, y_ax, xlabel='', ylabel='', xscale='linear'):
     mpl.rcParams['xtick.labelsize'] = 6
     
     #track
-    subplot_curve(plot=ax1, plot_curve=False, x_label=xlabel, y_label=ylabel, scatter=True, scatter_x=x_ax, scatter_y=y_ax, scatter_alpha=0.5, scatter_color='b', x_scale=xscale, xtick='bottom', removelast=False)
+    subplot_curve(plot=ax1, plot_curve=False, x_label=xlabel, y_label=ylabel, scatter=True, scatter_x=xdata, scatter_y=ydata, scatter_alpha=0.5, scatter_color=color, x_scale=xscale, y_scale=yscale, xtick='bottom', removelast=False)
     
     plt.show()
 
-def depth_intervals_porosity(x, y, c, xlabel='', ylabel='', clabel='', graphlabel='', xscale='linear', yscale='linear', colormap='jet', orientation=270, aspect=0.45):
-    """Plot a scattered graph for the x, y and c data
+def depth_intervals_porosity(xdata, ydata, cdata, xlabel='', ylabel='', clabel='', graphlabel='', xscale='linear', yscale='linear', colormap='jet', orientation=270, aspect=0.45):
+    """Plot a scattered graph for the xdata, ydata and cdata
 
     Parameters
     ----------
-    x: list of floats or integers
-        x represents the x axes of the graph
-    y: list of floats or integers
-        y represents the y axes of the graph
-    c: list of floats or integers
-        c represents the color of the dots in the graph
+    xdata: list of floats or integers
+        xdata represents the x axes of the graph
+    ydata: list of floats or integers
+        ydata represents the y axes of the graph
+    cdata: list of floats or integers
+        cdata represents the color of the dots in the graph
     xlabel: str
         label printed on the x axes
     ylabel: str
@@ -155,9 +182,9 @@ def depth_intervals_porosity(x, y, c, xlabel='', ylabel='', clabel='', graphlabe
 
     f1 = plt.figure(figsize=plt.figaspect(aspect))
     plt.scatter(
-        x=x,
-        y=y,
-        c=c,
+        x=xdata,
+        y=ydata,
+        c=cdata,
         cmap=colormap)
     plt.title(graphlabel)
     plt.xlabel(xlabel)
