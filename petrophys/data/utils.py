@@ -23,6 +23,27 @@ def convert_value_to_nan(arr: np.ndarray, value: float = -999.25):
     return arr
 
 def get_values(measure_data, data_key, mini=False, maxi=False):
+    """Return values of a single column of a dataset 
+
+
+    Parameters
+    ----------
+    measure_data : array
+        Input data.
+    data_key : str
+       Key of the column to return
+    mini: Boolean
+        If true remove outliners
+        Default is False
+    maxi: Boolean
+        If true remove outliners
+        Default is False
+
+    Returns
+    -------
+    np.array
+
+    """
     value = np.array(measure_data[data_key], dtype=float)
     if mini:
         np.nanmin(value)
