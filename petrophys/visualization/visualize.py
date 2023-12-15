@@ -400,10 +400,10 @@ def depth_intervals_cores(
     plt.show()
 
 
-def depth_intervals_porosity(
+def scattered_graph(
         xdata,
         ydata,
-        cdata,
+        cdata=[],
         xlabel='',
         ylabel='',
         clabel='',
@@ -411,8 +411,19 @@ def depth_intervals_porosity(
         xscale='linear',
         yscale='linear',
         colormap='jet',
+        colorbar=False,
+        legend=False,
+        legend_list=[],
         orientation=270,
-        aspect=0.45
+        xsize=15,
+        ysize=9,
+        xlim=0,
+        ylim=0,
+        y_reverse=False,
+        grid=False,
+        grid_color='g',
+        grid_alpha=0.3,
+        scatter_alpha=1
         ):
     """Plot a scattered graph for the xdata, ydata and cdata
 
@@ -429,7 +440,7 @@ def depth_intervals_porosity(
     ylabel: str
         label printed on the y axes
     clabel: str
-        label printed on the colormap
+        label printed on the colormap or legend
     graphlabel: str
         label printed on top of the graph
     xscale: str
@@ -442,27 +453,70 @@ def depth_intervals_porosity(
         colormap to use for the dots
         see https://matplotlib.org/stable/users/explain/colors/colormaps.html for options
         default is jet
+    colorbar: boolean
+        defines wether or not to print a colorbar
+        default is False
+    legend: boolean
+        defines wether or not to print a legend
+        default is False
+    legend_list: list
+        list of labels for the legend
+        default is an empty list
     orientation: int or float
         orientation of the clabel in degrees
         default is 270
-    aspect: float
-        Set the aspect ratio of the axes scaling, i.e. y/x-scale.
-        default is 0.45
+    xsize: integer
+        defines the size of the graph in the x direction
+        default is 15
+    ysize: integer
+        defines the size of the graph in the y direction
+        default is 9
+    xlim: integer or float
+        custom limit of the x axes
+        default is 0 (limit based on the data)
+    ylim: integer or float
+        custom limit of the y axes
+        default is 0 (limit based on the data)
 
     """
+    plt.figure(figsize=(xsize, ysize))
 
-    plt.figure(figsize=plt.figaspect(aspect))
-    plt.scatter(
-        x=xdata,
-        y=ydata,
-        c=cdata,
-        cmap=colormap)
+    plt.rcParams.update({'image.cmap': colormap})
+
+    if y_reverse:
+        plt.gca().invert_yaxis()
+
+    if type(cdata) == list:
+        scatter = plt.scatter(
+                               x=xdata,
+                               y=ydata,
+                               c=cdata,
+                               cmap=colormap,
+                               alpha=scatter_alpha
+                             )
+    else:
+        scatter = plt.scatter(
+                               x=xdata,
+                               y=ydata,
+                               c=cdata,
+                               alpha=scatter_alpha
+                             )
     plt.title(graphlabel)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.xscale(xscale)
     plt.yscale(yscale)
-    cbar = plt.colorbar()
-    cbar.set_label(clabel, rotation=orientation)
-
+    if xlim != 0:
+        plt.xlim(0, xlim)
+    if ylim != 0:
+        plt.ylim(0, ylim)
+    if colorbar:
+        cbar = plt.colorbar()
+        cbar.set_label(clabel, rotation=orientation)
+    if legend:
+        plt.legend(handles=scatter.legend_elements()[0],
+                   labels=legend_list,
+                   title=clabel)
+    if grid:
+        plt.grid(grid, c=grid_color, alpha=grid_alpha)
     plt.show()
