@@ -17,9 +17,9 @@ def remove_last(ax, which='upper'):
             mpl.ticker.MaxNLocator(nbins=nbins, prune=which)
             )
 
-
 def subplot_curve(
-        plot,
+        plot='',
+        fig='',
         plot_curve=True,
         xdata='',
         ydata='',
@@ -29,6 +29,7 @@ def subplot_curve(
         scatter_y='',
         scatter_alpha=0.3,
         scatter_color='g',
+        scatter_cmap='',
         x_label='',
         y_label='',
         graph_label='',
@@ -47,6 +48,9 @@ def subplot_curve(
         x_scale='linear',
         y_scale='linear',
         xtick='top',
+        color_bar=False, 
+        color_bar_label='', 
+        color_bar_rotation=270,
         removelast=True
         ):
     """Function to plot a graph based on the given parameters
@@ -138,8 +142,13 @@ def subplot_curve(
     if plot_curve:
         plot.plot(xdata, ydata, color, label=graph_label, linewidth=linewidth)
 
-    if scatter:
+    if scatter and not color_bar:
         plot.scatter(scatter_x, scatter_y, alpha=scatter_alpha, c=scatter_color)
+
+    if scatter and color_bar:
+        scattered = plot.scatter(scatter_x,scatter_y,alpha=scatter_alpha,c=scatter_color, cmap=scatter_cmap)
+        cbar = fig.colorbar(scattered, ax=plot, cmap="jet")
+        cbar.set_label(color_bar_label, rotation=color_bar_rotation)
 
     plot.set_xlabel(x_label, va=label_position)
     plot.set_xscale(x_scale)
@@ -153,7 +162,9 @@ def subplot_curve(
         plot.xaxis.tick_bottom()
 
     plot.xaxis.set_label_position(label_position)
-    plot.grid(grid, c=grid_color, alpha=grid_alpha)
+
+    if grid:
+        plot.grid(grid, c=grid_color, alpha=grid_alpha)
 
     if xlim_low != 0.0 or xlim_high != 0.0:
         plot.set_xlim(xlim_low, xlim_high)
@@ -164,6 +175,7 @@ def subplot_curve(
     if removelast:
         remove_last(plot)
 
+    return fig
 
 def well_curve(lasfile, xsize=18, ysize=16):
     """ Plots the GR, DT, RHOB, DRHO and NPHI vs Depth graphs of the given lasio file
@@ -399,6 +411,60 @@ def depth_intervals_cores(
 
     plt.show()
 
+
+def depth_intervals_porosity(xdata, ydata, cdata, xlabel, ylabel, clabel, graphlabel, yscale='linear'):
+
+    f1, (ax1) = plt.subplots(figsize=plt.figaspect(0.45))
+
+    subplot_curve(
+            plot=ax1,
+            fig=f1, 
+            plot_curve=False, 
+            x_label=xlabel, 
+            y_label=ylabel, 
+            graph_label = graphlabel, 
+            scatter=True, 
+            scatter_x=xdata, 
+            scatter_y=ydata, 
+            scatter_color=cdata,
+            scatter_alpha = 1,
+            scatter_cmap="jet", 
+            color_bar=True, 
+            color_bar_label=clabel,
+            label_position='bottom', 
+            grid=False,
+            y_scale=yscale,
+            removelast=False,
+            )
+
+    plt.show()
+
+def depth_intervals_porosity(xdata, ydata, cdata, xlabel, ylabel, clabel, graphlabel, yscale='linear'):
+
+    f1, (ax1) = plt.subplots(figsize=plt.figaspect(0.45))
+
+    subplot_curve(
+            plot=ax1,
+            fig=f1, 
+            plot_curve=False, 
+            x_label=xlabel, 
+            y_label=ylabel, 
+            graph_label = graphlabel, 
+            scatter=True, 
+            scatter_x=xdata, 
+            scatter_y=ydata, 
+            scatter_color=cdata,
+            scatter_alpha = 1,
+            scatter_cmap="jet", 
+            color_bar=True, 
+            color_bar_label=clabel,
+            label_position='bottom', 
+            grid=False,
+            y_scale=yscale,
+            removelast=False,
+            )
+
+    plt.show()
 
 def scattered_graph(
         xdata,
