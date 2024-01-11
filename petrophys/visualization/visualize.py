@@ -32,6 +32,7 @@ def subplot_curve(
         scatter_cmap='',
         x_label='',
         y_label='',
+        c_label='',
         graph_label='',
         graph_position='top',
         linewidth=0.5,
@@ -47,11 +48,15 @@ def subplot_curve(
         core_alpha=0.7,
         x_scale='linear',
         y_scale='linear',
+        x_lim=0,
+        y_lim=0,
         xtick='top',
         color_bar=False, 
         color_bar_label='', 
         color_bar_rotation=270,
-        removelast=True
+        removelast=True,
+        legend=False,
+        legend_list=[]
         ):
     """Function to plot a graph based on the given parameters
 
@@ -143,12 +148,20 @@ def subplot_curve(
         plot.plot(xdata, ydata, color, label=graph_label, linewidth=linewidth)
 
     if scatter and not color_bar:
-        plot.scatter(scatter_x, scatter_y, alpha=scatter_alpha, c=scatter_color)
+        if scatter_cmap == '':
+            scattered = plot.scatter(scatter_x, scatter_y, alpha=scatter_alpha, c=scatter_color)
+        else:
+            scattered = plot.scatter(scatter_x, scatter_y, alpha=scatter_alpha, c=scatter_color, cmap=scatter_cmap)
 
     if scatter and color_bar:
         scattered = plot.scatter(scatter_x,scatter_y,alpha=scatter_alpha,c=scatter_color, cmap=scatter_cmap)
-        cbar = fig.colorbar(scattered, ax=plot, cmap="jet")
+        cbar = fig.colorbar(scattered, ax=plot, cmap=scatter_cmap)
         cbar.set_label(color_bar_label, rotation=color_bar_rotation)
+
+    if x_lim != 0:
+        plt.xlim(0, x_lim)
+    if y_lim != 0:
+        plt.ylim(0, y_lim)
 
     plot.set_xlabel(x_label, va=label_position)
     plot.set_xscale(x_scale)
@@ -171,6 +184,11 @@ def subplot_curve(
     if hide_tick != 0:
         # Hide ticks defined by every hide_tick
         plt.setp(plot.get_xticklabels()[1::hide_tick], visible=False)
+
+    if legend:
+        plot.legend(handles=scattered.legend_elements()[0],
+                   labels=legend_list,
+                   title=c_label)
 
     if removelast:
         remove_last(plot)
@@ -466,123 +484,32 @@ def depth_intervals_porosity(xdata, ydata, cdata, xlabel, ylabel, clabel, graphl
 
     plt.show()
 
-def scattered_graph(
-        xdata,
-        ydata,
-        cdata=[],
-        xlabel='',
-        ylabel='',
-        clabel='',
-        graphlabel='',
-        xscale='linear',
-        yscale='linear',
-        colormap='jet',
-        colorbar=False,
-        legend=False,
-        legend_list=[],
-        orientation=270,
-        xsize=15,
-        ysize=9,
-        xlim=0,
-        ylim=0,
-        y_reverse=False,
-        grid=False,
-        grid_color='g',
-        grid_alpha=0.3,
-        scatter_alpha=1
-        ):
-    """Plot a scattered graph for the xdata, ydata and cdata
+def youngs_modulus_vs_depth(xdata, ydata, cdata, xlabel, ylabel, clabel, graphlabel, legend_list=[]):
 
-    Parameters
-    ----------
-    xdata: list of floats or integers
-        xdata represents the x axes of the graph
-    ydata: list of floats or integers
-        ydata represents the y axes of the graph
-    cdata: list of floats or integers
-        cdata represents the color of the dots in the graph
-    xlabel: str
-        label printed on the x axes
-    ylabel: str
-        label printed on the y axes
-    clabel: str
-        label printed on the colormap or legend
-    graphlabel: str
-        label printed on top of the graph
-    xscale: str
-        scale of the x axes, can take "linear' or 'log'
-        default is linear
-    yscale: str
-        scale of the y axes, can take "linear' or 'log'
-        default is linear
-    colormap: str
-        colormap to use for the dots
-        see https://matplotlib.org/stable/users/explain/colors/colormaps.html for options
-        default is jet
-    colorbar: boolean
-        defines wether or not to print a colorbar
-        default is False
-    legend: boolean
-        defines wether or not to print a legend
-        default is False
-    legend_list: list
-        list of labels for the legend
-        default is an empty list
-    orientation: int or float
-        orientation of the clabel in degrees
-        default is 270
-    xsize: integer
-        defines the size of the graph in the x direction
-        default is 15
-    ysize: integer
-        defines the size of the graph in the y direction
-        default is 9
-    xlim: integer or float
-        custom limit of the x axes
-        default is 0 (limit based on the data)
-    ylim: integer or float
-        custom limit of the y axes
-        default is 0 (limit based on the data)
+    f1, (ax1) = plt.subplots(1, 1, figsize=(15, 9))
 
-    """
-    plt.figure(figsize=(xsize, ysize))
+    subplot_curve(
+            plot=ax1,
+            fig=f1, 
+            plot_curve=False, 
+            x_label=xlabel, 
+            label_position='bottom',
+            y_label=ylabel, 
+            c_label=clabel, 
+            graph_label = graphlabel, 
+            scatter=True, 
+            scatter_x=xdata, 
+            scatter_y=ydata, 
+            scatter_color=cdata,
+            scatter_alpha = 1,
+            scatter_cmap="tab10", 
+            x_lim=6000,
+            y_lim=100,
+            legend=True,
+            legend_list=legend_list,
+            grid=False,
+            removelast=False,
+            )
 
-    plt.rcParams.update({'image.cmap': colormap})
-
-    if y_reverse:
-        plt.gca().invert_yaxis()
-
-    if type(cdata) == list:
-        scatter = plt.scatter(
-                               x=xdata,
-                               y=ydata,
-                               c=cdata,
-                               cmap=colormap,
-                               alpha=scatter_alpha
-                             )
-    else:
-        scatter = plt.scatter(
-                               x=xdata,
-                               y=ydata,
-                               c=cdata,
-                               alpha=scatter_alpha
-                             )
-    plt.title(graphlabel)
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
-    plt.xscale(xscale)
-    plt.yscale(yscale)
-    if xlim != 0:
-        plt.xlim(0, xlim)
-    if ylim != 0:
-        plt.ylim(0, ylim)
-    if colorbar:
-        cbar = plt.colorbar()
-        cbar.set_label(clabel, rotation=orientation)
-    if legend:
-        plt.legend(handles=scatter.legend_elements()[0],
-                   labels=legend_list,
-                   title=clabel)
-    if grid:
-        plt.grid(grid, c=grid_color, alpha=grid_alpha)
     plt.show()
+
