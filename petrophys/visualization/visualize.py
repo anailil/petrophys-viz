@@ -41,15 +41,15 @@ def subplot_curve(
         grid_color='g',
         grid_alpha=0.3,
         hide_tick=0,
-        xlim_low=0.0,
-        xlim_high=0.0,
+        xlim_low=None,
+        xlim_high=None,
+        ylim_low=None,
+        ylim_high=None,
         cores=[],
         core_linewidth=5.0,
         core_alpha=0.7,
         x_scale='linear',
         y_scale='linear',
-        x_lim=0,
-        y_lim=0,
         xtick='top',
         color_bar=False, 
         color_bar_label='', 
@@ -58,11 +58,13 @@ def subplot_curve(
         legend=False,
         legend_list=[]
         ):
+
     """Function to plot a graph based on the given parameters
 
     Parameters
     ----------
-    plot: figure
+    plot: axes of a figure
+    fig: figure
     plot_curve: Boolean
         Defines wether or not to plot a curve
         Default is True
@@ -85,14 +87,20 @@ def subplot_curve(
     scatter_alpha: float, default is 0.3
         Alpha adds transparency to a color, the range is from 0.0-1.0.
     scatter_color: str
-        color of the dots
+        color of the dots when using a single color
         see https://matplotlib.org/stable/gallery/color/named_colors.html or
             https://matplotlib.org/stable/users/explain/colors/colors.html for color options
+    scatter_cmap: str
+        colormap of the dots when the color of the dots represents a value. 
+        see https://matplotlib.org/stable/gallery/color/colormap_reference.html for options
     x_label: str
         label printed on the x axes
         Default is empty
     y_label: str
         label printed on the y axes
+        Default is empty
+    c_label: str
+        label printed on the legend of the colors of the dots.
         Default is empty
     graph_label: str
         Title of the graph.
@@ -136,9 +144,24 @@ def subplot_curve(
         Defines the place of the ticks on the x axes.
         Takes 'top' for top or any other for bottom.
         default is top.
+    color_bar: Boolean
+        Default is False
+        Defines wether or not to show a colorbar next to the graph
+    color_bar_label: str
+        Default is empty
+        Defines the label of the colorbar
+    color_bar_rotation: float
+        Default: 270
+        Defines the angle in whoch to show the colorbar label
     removelast: Boolean
         Wether or not to call the removelast function for cleaner graphs.
         default is True
+    legend: Boolean
+        Default is False
+        Defines wether or not to display a legend
+    legend_list: list
+        Default is empty
+        Defines the values to show on the legend 
     """
 
     if cores != []:
@@ -158,11 +181,6 @@ def subplot_curve(
         cbar = fig.colorbar(scattered, ax=plot, cmap=scatter_cmap)
         cbar.set_label(color_bar_label, rotation=color_bar_rotation)
 
-    if x_lim != 0:
-        plt.xlim(0, x_lim)
-    if y_lim != 0:
-        plt.ylim(0, y_lim)
-
     plot.set_xlabel(x_label, va=label_position)
     plot.set_xscale(x_scale)
     plot.set_ylabel(y_label)
@@ -179,8 +197,9 @@ def subplot_curve(
     if grid:
         plot.grid(grid, c=grid_color, alpha=grid_alpha)
 
-    if xlim_low != 0.0 or xlim_high != 0.0:
-        plot.set_xlim(xlim_low, xlim_high)
+    plot.set_xlim(xlim_low, xlim_high)
+    plot.set_ylim(ylim_low, ylim_high)
+
     if hide_tick != 0:
         # Hide ticks defined by every hide_tick
         plt.setp(plot.get_xticklabels()[1::hide_tick], visible=False)
@@ -477,6 +496,7 @@ def depth_intervals_porosity(xdata, ydata, cdata, xlabel, ylabel, clabel, graphl
             color_bar=True, 
             color_bar_label=clabel,
             label_position='bottom', 
+            xtick='bottom',
             grid=False,
             y_scale=yscale,
             removelast=False,
@@ -503,8 +523,9 @@ def youngs_modulus_vs_depth(xdata, ydata, cdata, xlabel, ylabel, clabel, graphla
             scatter_color=cdata,
             scatter_alpha = 1,
             scatter_cmap="tab10", 
-            x_lim=6000,
-            y_lim=100,
+            xlim_high=6000,
+            ylim_high=100,
+            xtick='bottom',
             legend=True,
             legend_list=legend_list,
             grid=False,
