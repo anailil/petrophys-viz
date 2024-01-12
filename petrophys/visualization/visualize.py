@@ -82,17 +82,22 @@ def subplot_curve(
         Default is False
     scatter_x: list of floats or integers
         Represents the x axes of the graph
+        Default is empty
     scatter_y: list of floats or integers
         Represents the y axes of the graph
-    scatter_alpha: float, default is 0.3
+        Default is empty
+    scatter_alpha: float 
         Alpha adds transparency to a color, the range is from 0.0-1.0.
+        Default is 0.3
     scatter_color: str
         color of the dots when using a single color
         see https://matplotlib.org/stable/gallery/color/named_colors.html or
             https://matplotlib.org/stable/users/explain/colors/colors.html for color options
+        Default is g (green)
     scatter_cmap: str
         colormap of the dots when the color of the dots represents a value. 
         see https://matplotlib.org/stable/gallery/color/colormap_reference.html for options
+        Default is empty
     x_label: str
         label printed on the x axes
         Default is empty
@@ -105,11 +110,15 @@ def subplot_curve(
     graph_label: str
         Title of the graph.
         Default is empty
-    graph_position='top',
+    graph_position: str
+        Defines the position of the grapg label
+        Default is top
     linewidth: float
         Defines the linewidth of the graph
         Default is 0.5
-    label_position='top',
+    label_position: str
+       Defines the position of the x-axes label.
+       Default is top
     grid: Boolean
         Defines wether or not to show a grid.
         Default = True
@@ -117,8 +126,10 @@ def subplot_curve(
         color of the grid
         see https://matplotlib.org/stable/gallery/color/named_colors.html or
             https://matplotlib.org/stable/users/explain/colors/colors.html for color options
-    grid_alpha=: float, default is 0.3
+        Default is g (green)
+    grid_alpha=: float
         Alpha adds transparency to a color, the range is from 0.0-1.0.
+        Default is 0.3
     hide_tick: integer
         Defines ticks to skip in the x axes. .
         default is 0
@@ -130,10 +141,13 @@ def subplot_curve(
         default is 0.0
     cores: list
         definition of the cores to plot.
+        Default is empty
     core_linewidth: float
         Defines the thickness of the cores line
+        Default is 5.0
     core_alpha: float
         Alpha adds transparency to a color, the range is from 0.0-1.0.
+        Default is 0.3
     x_scale: str
         scale of the x axes, can take "linear' or 'log'
         default is linear
@@ -145,23 +159,23 @@ def subplot_curve(
         Takes 'top' for top or any other for bottom.
         default is top.
     color_bar: Boolean
-        Default is False
         Defines wether or not to show a colorbar next to the graph
+        Default is False
     color_bar_label: str
-        Default is empty
         Defines the label of the colorbar
+        Default is empty
     color_bar_rotation: float
-        Default: 270
         Defines the angle in whoch to show the colorbar label
+        Default: 270
     removelast: Boolean
         Wether or not to call the removelast function for cleaner graphs.
         default is True
     legend: Boolean
-        Default is False
         Defines wether or not to display a legend
+        Default is False
     legend_list: list
-        Default is empty
         Defines the values to show on the legend 
+        Default is empty
     """
 
     if cores != []:
@@ -222,9 +236,10 @@ def well_curve(lasfile, xsize=18, ysize=16):
     lasfile: lasio dataset
     xsize: float or integer
         size of the figure in the horizontal direction
+        Default is 18
     ysize: float or integer
         size of the figure in the vertical direction
-
+        Default is 16
     """
     f1, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1, 5, sharey=True, figsize=(xsize, ysize))
     f1.subplots_adjust(wspace=0.02)
@@ -314,8 +329,10 @@ def petro_measure_curve(
     cores: csv table
     xsize: float or integer
         size of the figure in the horizontal direction
+        Default is 8
     ysize: float or integer
         size of the figure in the vertical direction
+        Default is 7
 
     """
 
@@ -404,8 +421,10 @@ def depth_intervals_cores(
         ydata represents the y axes of the graph
     xlabel: str
         label printed on the x axes
+        Default is empty
     ylabel: str
         label printed on the y axes
+        Default is empty
     xscale: str
         scale of the x axes, can take "linear' or 'log'
         default is linear
@@ -414,12 +433,15 @@ def depth_intervals_cores(
         default is linear
     xsize: float or integer
         size of the figure in the horizontal direction
+        Default is 9
     ysize: float or integer
         size of the figure in the vertical direction
+        Default is 5
     color: str
         color of the dots
         see https://matplotlib.org/stable/gallery/color/named_colors.html or
             https://matplotlib.org/stable/users/explain/colors/colors.html for color options
+        default is b (blue)
     """
 
     f1, (ax1) = plt.subplots(1, 1, figsize=(xsize, ysize))
@@ -451,6 +473,33 @@ def depth_intervals_cores(
 
 def depth_intervals_porosity(xdata, ydata, cdata, xlabel, ylabel, clabel, graphlabel, yscale='linear'):
 
+    """Plot a scattered graph for xdata, ydata and cdata width a colorbar
+
+    Parameters
+    ----------
+    xdata: list of floats or integers
+        xdata represents the x axes of the graph
+    ydata: list of floats or integers
+        ydata represents the y axes of the graph
+    cdata: list of floats or integers
+        cdata represents the y axes of the graph
+    xlabel: str
+        label printed on the x axes
+        Default is empty
+    ylabel: str
+        label printed on the y axes
+        Default is empty
+    clabel: str
+        label printed on the colorbar
+        Default is empty
+    graphlabel: str
+        label of the graph
+        Default is empty
+    yscale: str
+        scale of the y axes, can take "linear' or 'log'
+        default is linear
+    """
+
     f1, (ax1) = plt.subplots(figsize=plt.figaspect(0.45))
 
     subplot_curve(
@@ -469,34 +518,6 @@ def depth_intervals_porosity(xdata, ydata, cdata, xlabel, ylabel, clabel, graphl
             color_bar=True, 
             color_bar_label=clabel,
             label_position='bottom', 
-            grid=False,
-            y_scale=yscale,
-            removelast=False,
-            )
-
-    plt.show()
-
-def depth_intervals_porosity(xdata, ydata, cdata, xlabel, ylabel, clabel, graphlabel, yscale='linear'):
-
-    f1, (ax1) = plt.subplots(figsize=plt.figaspect(0.45))
-
-    subplot_curve(
-            plot=ax1,
-            fig=f1, 
-            plot_curve=False, 
-            x_label=xlabel, 
-            y_label=ylabel, 
-            graph_label = graphlabel, 
-            scatter=True, 
-            scatter_x=xdata, 
-            scatter_y=ydata, 
-            scatter_color=cdata,
-            scatter_alpha = 1,
-            scatter_cmap="jet", 
-            color_bar=True, 
-            color_bar_label=clabel,
-            label_position='bottom', 
-            xtick='bottom',
             grid=False,
             y_scale=yscale,
             removelast=False,
@@ -505,6 +526,33 @@ def depth_intervals_porosity(xdata, ydata, cdata, xlabel, ylabel, clabel, graphl
     plt.show()
 
 def youngs_modulus_vs_depth(xdata, ydata, cdata, xlabel, ylabel, clabel, graphlabel, legend_list=[]):
+
+    """Plot a scattered graph for xdata, ydata and cdata with a legend
+
+    Parameters
+    ----------
+    xdata: list of floats or integers
+        xdata represents the x axes of the graph
+    ydata: list of floats or integers
+        ydata represents the y axes of the graph
+    cdata: list of floats or integers
+        cdata represents the y axes of the graph
+    xlabel: str
+        label printed on the x axes
+        Default is empty
+    ylabel: str
+        label printed on the y axes
+        Default is empty
+    clabel: str
+        label printed on the colorbar
+        Default is empty
+    graphlabel: str
+        label of the graph
+        Default is empty
+    legend_list: list
+        Defines the values displayed on the legend
+        default is empty
+    """
 
     f1, (ax1) = plt.subplots(1, 1, figsize=(15, 9))
 
