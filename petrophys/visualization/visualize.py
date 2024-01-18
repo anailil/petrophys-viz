@@ -228,6 +228,51 @@ def subplot_curve(
 
     return fig
 
+def well_curve2(GRAPHS, xsize=18, ysize=16):
+    """ Plots the  graphs given in the GRAPHS variable
+
+    Parameters
+    ----------
+    GRAPHS: list
+        List of Lists of graph data
+    xsize: float or integer
+        size of the figure in the horizontal direction
+        Default is 18
+    ysize: float or integer
+        size of the figure in the vertical direction
+        Default is 16
+    """
+    f1, (axs) = plt.subplots(ncols=len(GRAPHS), nrows=1, sharey=True, figsize=(xsize, ysize))
+
+    f1.subplots_adjust(wspace=0.02)
+    plt.gca().invert_yaxis()
+
+    # So that y-tick labels appear on left and right
+    plt.tick_params(labelright=True)
+
+    # Change tick-label globally
+    mpl.rcParams['xtick.labelsize'] = 6
+
+    for i in range(len(GRAPHS)):
+        for j in range(len(GRAPHS[i])):
+            print(i," ",j)
+            print(GRAPHS[i][j][2])
+            print(GRAPHS[i][j][4])
+            print(GRAPHS[i][j][0])
+            print(GRAPHS[i][j][1])
+            print(GRAPHS[i][j][3])
+            subplot_curve(
+                plot=axs[i],
+                xdata=GRAPHS[i][j][2],
+                ydata=GRAPHS[i][j][4],
+                color=GRAPHS[i][j][0],
+                x_label=GRAPHS[i][j][1],
+                y_label=GRAPHS[i][j][3],
+                hide_tick=2
+                )
+
+    plt.show()
+
 def well_curve(lasfile, xsize=18, ysize=16):
     """ Plots the GR, DT, RHOB, DRHO and NPHI vs Depth graphs of the given lasio file
 
