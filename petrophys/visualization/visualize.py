@@ -62,6 +62,7 @@ def subplot_curve(
         ytick_size=10,
         invert_x=False,
         invert_y=False,
+        spine=0,
         ):
 
     """Function to plot a graph based on the given parameters
@@ -221,12 +222,17 @@ def subplot_curve(
     plot.set_yscale(y_scale)
     plot.set_title(graph_label)
 
+    #if spine > 0:
+    plot.spines["top"].set_position(("axes", 0.96+((spine+1)/20)))
+    plot.spines['top'].set_edgecolor(color)
+
     if xtick == 'top':
         plot.xaxis.tick_top()
     else:
         plot.xaxis.tick_bottom()
 
-    plot.xaxis.set_label_position(label_position)
+    plot.xaxis.set_label_position('top')
+    plot.xaxis.set_ticks_position('top')
     plot.tick_params(axis='x', labelsize=xtick_size)
     plot.tick_params(axis='y', labelsize=ytick_size)
 
@@ -260,7 +266,7 @@ def subplot_curve(
 
     return fig
 
-def well_curve2(GRAPHS, invert_x=False, invert_y=False, xlim_high=None, xlim_low=None, ylim_high=None, ylim_low=None, xsize=18, ysize=16):
+def well_curve3(GRAPHS, invert_x=False, invert_y=False, xlim_high=None, xlim_low=None, ylim_high=None, ylim_low=None, xsize=18, ysize=16):
     """ Plots the  graphs given in the GRAPHS variable
 
     Parameters
@@ -349,6 +355,103 @@ def well_curve2(GRAPHS, invert_x=False, invert_y=False, xlim_high=None, xlim_low
                 invert_y=invert_y,
                 linewidth=GRAPHS[i][j][0],
                 legend_curve=GRAPHS[i][j][10]
+                )
+
+    plt.show()
+
+def well_curve2(GRAPHS, invert_x=False, invert_y=False, xlim_high=None, xlim_low=None, ylim_high=None, ylim_low=None, xsize=18, ysize=16):
+    """ Plots the  graphs given in the GRAPHS variable
+
+    Parameters
+    ----------
+    GRAPHS: list
+        List of Lists of graph data
+        One graph list has the following data:
+
+        [   line width: float, 
+            color:str, 
+            hide ticks:int, 
+            graph label:str, 
+            x label:str, 
+            x data:list, 
+            y label:str, 
+            y data:list, 
+            low limit x-axes: float, 
+            high limit x-axes: float, 
+            print a legend: boolean
+        ]
+
+    invert_x: Boolean
+        Defines wether or not to invert the x-axes
+        Default is False, 
+    invert_y: Boolean
+        Defines wether or not to invert the y-axes
+        Default is False, 
+    xlim_high: Float
+        Defines the high limit of the X-axes
+        Default is None 
+    xlim_low: Float
+        Defines the low limit of the X-axes
+        Default is None 
+    ylim_high: Float
+        Defines the high limit of the y-axes
+        Default is None 
+    ylim_low: Float
+        Defines the low limit of the y-axes
+        Default is None 
+    xsize: float or integer
+        size of the figure in the horizontal direction
+        Default is 18
+    ysize: float or integer
+        size of the figure in the vertical direction
+        Default is 16
+    """
+    number_of_graphs = len(GRAPHS)
+
+    f1, (axs) = plt.subplots(ncols=number_of_graphs, nrows=1, sharey=True, figsize=(xsize, ysize))
+
+    f1.subplots_adjust(wspace=0.02)
+
+    # So that y-tick labels appear on left and right
+    plt.tick_params(labelright=True)
+
+    # Change tick-label globally
+    mpl.rcParams['xtick.labelsize'] = 6
+
+    for i in range(number_of_graphs):
+        graphlabel = ''
+        for j in range(len(GRAPHS[i])):
+            #if len(GRAPHS[i]) > 1:
+                #graphlabel = graphlabel + GRAPHS[i][j][3]
+            #else:
+                #graphlabel = GRAPHS[i][j][3]
+
+            if number_of_graphs == 1:
+                plot_graph=axs
+            else:
+                if j > 0:
+                    plot_graph=axs[i].twiny()
+                else:
+                    plot_graph=axs[i]
+
+            subplot_curve(
+                plot=plot_graph,
+                xdata=GRAPHS[i][j][5],
+                ydata=GRAPHS[i][j][7],
+                color=GRAPHS[i][j][1],
+                x_label=GRAPHS[i][j][4],
+                y_label=GRAPHS[i][j][6],
+                graph_label=graphlabel,
+                hide_tick=GRAPHS[i][j][2],
+                ylim_low=ylim_low,
+                ylim_high=ylim_high,
+                xlim_low=GRAPHS[i][j][8],
+                xlim_high=GRAPHS[i][j][9],
+                invert_x=invert_x,
+                invert_y=invert_y,
+                linewidth=GRAPHS[i][j][0],
+                #legend_curve=GRAPHS[i][j][10],
+                spine=j
                 )
 
     plt.show()
